@@ -1,0 +1,4 @@
+docker/data*
+*.sql
+*.gz
+private

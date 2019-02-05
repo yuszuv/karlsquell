@@ -1,0 +1,30 @@
+version: '3'
+services:
+  shell:
+    build: .
+    ports:
+     - "5000:5000"
+    volumes:
+      - ./../code:/app
+      - ./../private:/private
+      - ./my.cnf.shell:/etc/mysql/my.cnf
+    depends_on:
+      - db
+    entrypoint:
+      - sh
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+      args:
+        uid: "${USER_UID:-1000}"
+        gid: "${USER_GID:-1000}"
+    volumes:
+      - ./data_5_0:/mysql/data
+      - ./my.cnf.db:/etc/my.cnf
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
