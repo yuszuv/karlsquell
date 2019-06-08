@@ -1,13 +1,19 @@
 version: '3'
 services:
   shell:
-    build: .
+    build:
+      context: ../code/
+      dockerfile: ../docker/Dockerfile.ruby
     ports:
      - "5000:5000"
     volumes:
       - ./../code:/app
       - ./../private:/private
       - ./my.cnf.shell:/etc/mysql/my.cnf
+      - ./ashrc:/home/user/.ashrc
+      - ./pryrc:/home/user/.pryrc
+      - ./pry_history:/home/user/.pry_history
+      - ./ash_history:/home/user/.ash_history
     depends_on:
       - db
     entrypoint:

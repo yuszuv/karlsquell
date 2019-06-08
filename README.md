@@ -1,6 +1,6 @@
 # karlsquell maintenance scripts: demo of rom-rb and dry-rb
 
-This code real production code ... pimped with [dry-rb](https://dry-rb.org/) and [rom-rb](https://rom-rb.org) :)
+This is real production code ... spiced up with [dry-rb](https://dry-rb.org/) and [rom-rb](https://rom-rb.org) :)
 
 The task was to write a maintenance script to clean up the database of legacy system, running ruby 1.8.6 and mysql 5.0.17. So unfortunately I couldn't use neither `dry-rb` nor `rom-rb`. But I tried to mimic some of the patterns I've developed using these gems. So I ended up with a `lib` directory ... at least: I've also learned a lot about the garbage collector of ruby 1.8.6. This was great fun!
 

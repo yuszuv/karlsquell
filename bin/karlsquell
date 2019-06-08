@@ -1,0 +1,82 @@
+#!/usr/bin/env ruby
+
+require 'bundler'
+Bundler.require(:default)
+
+$: << File.join(File.dirname(__FILE__), '../')
+
+require 'optparse'
+require 'ostruct'
+require 'fileutils'
+
+options = OpenStruct.new
+options.limit = 1_000_000
+options.log_level = Logger::INFO
+
+OptionParser.new do |parser|
+  parser.banner = <<-EOF
+Usage:
+  karlsquell <command> [OPTIONS]
+
+Available Commands:
+  clean-up-tt-content [-l LIMIT]
+    Strip karlsquell specific tags from tt_content's bodytext
+
+  clean-up-sys-history [-l LIMIT]
+    Strip karlsquell specific tags from sys_history's history_data
+
+  delete-page-by-fe-group FE_GROUP
+    Delete all pages whose fe_group is FE_GROUP, including subtree, tt_content, pages_language_overlay, sys_log, and sys_history entries associated
+
+  delete-tt-content-by-fe-group FE_GROUP
+    Delete all tt_content whose fe_group is FE_GROUP, including sys_log and sys_history entries associated
+
+  delete-page-with-subtree UID
+    Delete page with uid UID, including subtree, tt_content, pages_language_overlay, sys_log, and sys_history entries associated
+
+  db
+    Get a mysql client session
+EOF
+
+  parser.separator ""
+  parser.separator "Available options:"
+  parser.separator ""
+
+  parser.on("-d", "--debug", "Set log level to DEBUG") do |_|
+    options.log_level = Logger::DEBUG
+  end
+
+  parser.on("-h", "--help", "Show this help message") do |_|
+    puts parser
+    return true
+  end
+
+  parser.on("-l", "--limit LIMIT", Integer, "Limit queries to get at most LIMIT records") do |v|
+    options.limit = v
+  end
+end.parse!
+
+require 'system/app'
+
+App['logger'].level = options.log_level
+
+if __FILE__ == $0
+  case ARGV[0]
+  when "clean-up-tt-content"
+    App['transactions.clean_up_tt_content'].(options.limit)
+  when "clean-up-sys-history"
+    App['transactions.clean_up_sys_history'].(options.limit)
+  when "delete-page-by-fe-group"
+    App['transactions.delete_page_by_fe_group'].(ARGV[1])
+  when "delete-tt-content-by-fe-group"
+    App['transactions.delete_tt_content_by_fe_group'].(ARGV[1])
+  when "delete-page-with-subtree"
+    App['transactions.delete_page_with_subtree'].(ARGV[1])
+  when "db"
+    curr_dir = Dir.pwd
+    Dir.chdir(File.dirname(__FILE__))
+    system "./db.sh"
+    Dir.chdir(curr_dir)   # Restore the original working directory if desired
+  end
+end
+
