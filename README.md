@@ -2,9 +2,9 @@
 
 This is real production code ... spiced up with [dry-rb](https://dry-rb.org/) and [rom-rb](https://rom-rb.org) :)
 
-The task was to write a maintenance script to clean up the database of legacy system, running ruby 1.8.6 and mysql 5.0.17. So unfortunately I couldn't use neither `dry-rb` nor `rom-rb`. But I tried to mimic some of the patterns I've developed using these gems. So I ended up with a `lib` directory ... at least: I've also learned a lot about the garbage collector of ruby 1.8.6. This was great fun!
+The task was to write a maintenance script to clean up the database of a legacy system, running ruby 1.8.6 and mysql 5.0.17. So unfortunately I couldn't use neither `dry-rb` nor `rom-rb`. But I tried to mimic some of the patterns I've developed using these gems. So I ended up with a `lib` directory ... at least: I've also learned a lot about the garbage collector of ruby 1.8.6. This was great fun!
 
-After I was done, I decided to use my docker setup and upgrade the code `dry-rb` and `rom-rb`. As one can see, the structure of the files hasn't changed that much, but they are more terse and easier to grasp ... at least if you like monads.
+After I was done, I decided to use my docker setup and port the code to `dry-rb` and `rom-rb`. As one can see, the structure of the files hasn't changed that much, but they are terser and easier to grasp ... at least if you like monads.
 
 ## Setup
 
@@ -14,7 +14,7 @@ mkdir private
 cp /path/to/database_dump.sql ./private
 ```
 
-Then run docker setup (see below), login to docker container and import dump with `db.sh < /private/database_dump.sql`
+Then run the docker setup (see below), login to the docker container and import a dump with `db.sh < /private/database_dump.sql`
 
 ## Usage
 
