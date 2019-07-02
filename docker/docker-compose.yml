@@ -2,7 +2,7 @@ version: '3'
 services:
   shell:
     build:
-      context: ../code/
+      context: ../
       dockerfile: ../docker/Dockerfile.ruby
     ports:
      - "5000:5000"
